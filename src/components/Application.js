@@ -1,25 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import DayList from "./DayList";
 import Appointment from "components/Appointment/index";
-import "components/Application.scss";
+import getAppointmentsForDay from "../helpers/selectors"
 
-const days = [
-  {
-    id: 1,
-    name: "Monday",
-    spots: 2,
-  },
-  {
-    id: 2,
-    name: "Tuesday",
-    spots: 5,
-  },
-  {
-    id: 3,
-    name: "Wednesday",
-    spots: 0,
-  },
-];
+import "components/Application.scss";
 
 const appointments = [
   {
@@ -69,7 +54,43 @@ const appointments = [
 ];
 
 export default function Application(props) {
-  const [day, setDay] = useState("Monday");
+
+  const [state, setState] = useState({
+    day: "Monday",
+    days: [],
+    appointments: { appointments }
+  });
+
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
+  
+  const schedule = dailyAppointments.map((appointment) => {
+    return (
+      <Appointment 
+      key={appointment.id} {...appointment} 
+      />
+    );
+  });
+
+  //prop drilling
+  const setDay = day => setState({ ...state, day });
+  //days: days replace the original key value pair
+  // const setDays = days => setState(prev => ({ ...prev, days }));
+
+  useEffect(() => {
+    Promise.all([
+      axios.get("/api/days"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers")
+    ]).then((all) => {
+      // console.log("all --------",all)
+      setState(prev => ({
+        ...prev, 
+        days: all[0].data, 
+        appointments: all[1].data, 
+        interviewers:all[2].data 
+      }));
+    })
+   }, []);
 
   return (
     <main className="layout">
@@ -84,8 +105,8 @@ export default function Application(props) {
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
           <DayList
-            days={days}
-            day={day}
+            days={state.days}
+            day={state.day}
             setDay={setDay}
           />
         </nav>
@@ -99,14 +120,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {/* Replace this with the schedule elements durint the "The Scheduler" activity. */
-          appointments.map((appointment) => {
-            console.log(appointment);
-            return (
-              <Appointment 
-              key={appointment.id} {...appointment} 
-              />
-            ); 
-          })
+          schedule
         }
       </section>
     </main>
