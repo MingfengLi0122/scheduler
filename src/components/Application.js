@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DayList from "./DayList";
 import Appointment from "components/Appointment/index";
-import getAppointmentsForDay from "../helpers/selectors"
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors"
 
 import "components/Application.scss";
 
-const appointments = [
+const appointmentsData = [
   {
     id: 1,
     time: "12pm",
@@ -58,23 +58,28 @@ export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    appointments: { appointments }
+    appointments: { appointmentsData }
   });
 
-  const dailyAppointments = getAppointmentsForDay(state, state.day);
-  
-  const schedule = dailyAppointments.map((appointment) => {
+  const appointments = getAppointmentsForDay(state, state.day);
+  const interviewers = getInterviewersForDay(state, state.day);
+  // console.log("interviewers-----:", interviewers);
+  const schedule = appointments.map((appointment) => {
+
+  const interview = getInterview(state, appointment.interview);
     return (
-      <Appointment 
-      key={appointment.id} {...appointment} 
-      />
+      <Appointment
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
+        interviewers={interviewers}
+    />
     );
   });
 
   //prop drilling
   const setDay = day => setState({ ...state, day });
-  //days: days replace the original key value pair
-  // const setDays = days => setState(prev => ({ ...prev, days }));
 
   useEffect(() => {
     Promise.all([
@@ -82,7 +87,6 @@ export default function Application(props) {
       axios.get("/api/appointments"),
       axios.get("/api/interviewers")
     ]).then((all) => {
-      // console.log("all --------",all)
       setState(prev => ({
         ...prev, 
         days: all[0].data, 
@@ -95,7 +99,7 @@ export default function Application(props) {
   return (
     <main className="layout">
       <section className="sidebar">
-        {/* Replace this with the sidebar elements during the "Project Setup & Familiarity" activity. */
+        {
         <>
         <img
         className="sidebar--centered"
@@ -119,9 +123,7 @@ export default function Application(props) {
         }
       </section>
       <section className="schedule">
-        {/* Replace this with the schedule elements durint the "The Scheduler" activity. */
-          schedule
-        }
+        { schedule }
       </section>
     </main>
   );
