@@ -5,8 +5,7 @@ const SET_DAY = "SET_DAY";
 const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 const SET_INTERVIEW = "SET_INTERVIEW";
 
-function reducer(state, action) {
-  console.log("action.type -----",action.type);
+function reducer(state, action) { 
   switch (action.type) {
     case SET_DAY:
       return {
@@ -19,11 +18,32 @@ function reducer(state, action) {
               ...action.data
               };
     case SET_INTERVIEW: 
-          console.log("set inter!!!!!!!");
+       console.log("state:---", state);
+      if (action.data) {
+      const appointment = {
+        ...state.appointments[action.data.id],
+        interview: action.data.interview
+      }
+      const appointments = {
+        ...state.appointments,
+        [action.data.id]: appointment
+      };
+       
+      const curDayObj = state.days.find(d => d.name === state.day);
+      const curIndex = state.days.findIndex(d => d.name === state.day);
+      const listNullApp = curDayObj.appointments.filter(id => !appointments[id].interview);
+      const spots = listNullApp.length;
+      const updatedDay = {...curDayObj, spots};
+      let days = [...state.days]
+      days[curIndex] = updatedDay;
+
       return {
               ...state, 
-              ...action.data
-             };
+              appointments,
+              days
+              };
+      }
+      return state;
     default:
       throw new Error(
         `Tried to reduce with unsupported action type: ${action.type}`
@@ -41,27 +61,14 @@ export default function useApplicationData() {
   
   const setDay = day => dispatch({ type: SET_DAY, data: { day } });
   
-  function bookInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    }
-    
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-    
+  function bookInterview(id, interview) {    
     return axios
     .put(`/api/appointments/${id}`, { interview })
     .then(() =>  
-      axios.get("/api/days")
-        .then(response => {
-          dispatch({
-            type: SET_INTERVIEW,
-            data: { appointments, days: response.data }
-          })
-        })
+      dispatch({
+        type: SET_INTERVIEW, 
+        data: { id, interview }
+      })
     )
   }
   
@@ -69,13 +76,10 @@ export default function useApplicationData() {
     return axios
     .delete(`/api/appointments/${id}`)
     .then(() =>  
-      axios.get("/api/days")
-        .then(response => {
-          dispatch({
-            type: SET_INTERVIEW, 
-            data: { days: response.data }
-          })
-        })
+      dispatch({
+        type: SET_INTERVIEW, 
+        data: { id, interview: null }
+      })
     )
   }
   
@@ -105,8 +109,12 @@ export default function useApplicationData() {
     socket.onmessage = function(event) {
       const data = JSON.parse(event.data);
       if (typeof data === 'object' && data.type) {
-        console.log("data--------", data);
-        return dispatch(data);
+        // console.log("data--------", data);
+        const dispatchData = { id: data.id, interview: data.interview }
+        return dispatch({
+                type: data.type, 
+                data: dispatchData
+               });
       }
     };
     return () => socket.close();
