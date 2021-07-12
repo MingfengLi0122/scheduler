@@ -1,4 +1,3 @@
-import { action } from "@storybook/addon-actions";
 import axios from "axios";
 import { useReducer, useEffect } from "react";
 
