@@ -24,14 +24,14 @@ export default function Appointment(props) {
   const { id, time, interview, interviewers, bookInterview, cancleInterview } = props;
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);
 
-  // useEffect(() => {
-  //   if (interview && mode === EMPTY) {
-  //    transition(SHOW);
-  //   }
-  //   if (interview === null && mode === SHOW) {
-  //    transition(EMPTY);
-  //   }
-  //  }, [interview, transition, mode]);
+  useEffect(() => {
+    if (interview && mode === EMPTY) {
+     transition(SHOW);
+    }
+    if (interview === null && mode === SHOW) {
+     transition(EMPTY);
+    }
+   }, [interview, transition, mode]);
   
   function save(name, interviewer) {
     if (name && interviewer) {
