@@ -1,3 +1,4 @@
+import { action } from "@storybook/addon-actions";
 import axios from "axios";
 import { useReducer, useEffect } from "react";
 
@@ -6,22 +7,24 @@ const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 const SET_INTERVIEW = "SET_INTERVIEW";
 
 function reducer(state, action) {
+  console.log("action.type -----",action.type);
   switch (action.type) {
     case SET_DAY:
-      return {...state, day: action.day};
+      return {
+              ...state, 
+              ...action.data
+              };
     case SET_APPLICATION_DATA:
       return {
               ...state, 
-              days: action.days, 
-              appointments: action.appointments, 
-              interviewers: action.interviewers
-            };
+              ...action.data
+              };
     case SET_INTERVIEW: 
+          console.log("set inter!!!!!!!");
       return {
               ...state, 
-              appointments:action.appointments, 
-              days:action.days
-            };
+              ...action.data
+             };
     default:
       throw new Error(
         `Tried to reduce with unsupported action type: ${action.type}`
@@ -30,7 +33,6 @@ function reducer(state, action) {
 }
 
 export default function useApplicationData() {
-  
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
@@ -38,12 +40,12 @@ export default function useApplicationData() {
     interviewers: {}
   });
   
-  const setDay = day => dispatch({ type: SET_DAY, day });
+  const setDay = day => dispatch({ type: SET_DAY, data: { day } });
   
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
-      interview: {...interview}
+      interview: { ...interview }
     }
     
     const appointments = {
@@ -52,62 +54,63 @@ export default function useApplicationData() {
     };
     
     return axios
-    .put(`/api/appointments/${id}`, {interview})
+    .put(`/api/appointments/${id}`, { interview })
     .then(() =>  
       axios.get("/api/days")
         .then(response => {
-          dispatch(
-            {
-              type: SET_INTERVIEW,
-              appointments,
-              days: response.data
-            }
-          )
+          dispatch({
+            type: SET_INTERVIEW,
+            data: { appointments, days: response.data }
+          })
         })
     )
   }
   
   function cancleInterview(id) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: null
-    }
-    
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    }
-    
     return axios
     .delete(`/api/appointments/${id}`)
     .then(() =>  
       axios.get("/api/days")
         .then(response => {
-          dispatch(
-            {
-              type: SET_INTERVIEW, 
-              appointments, 
-              days: response.data
-            }
-          )
+          dispatch({
+            type: SET_INTERVIEW, 
+            data: { days: response.data }
+          })
         })
     )
   }
-
+  
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
       axios.get("/api/appointments"),
       axios.get("/api/interviewers"),
     ]).then((all) => {
-      dispatch(
-        {
+      dispatch({
         type: SET_APPLICATION_DATA, 
-        days: all[0].data, 
-        appointments: all[1].data, 
-        interviewers:all[2].data 
+        data: { 
+                days: all[0].data, 
+                appointments: all[1].data, 
+                interviewers:all[2].data
+              }
       });
     })
+  }, []);
+
+  useEffect(() => {
+    const socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    
+    socket.onopen = function (event) {
+      socket.send('ping');
+    };
+    socket.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      if (typeof data === 'object' && data.type) {
+        console.log("data--------", data);
+        return dispatch(data);
+      }
+    };
+    return () => socket.close();
   }, []);
 
   return { state, setDay, bookInterview, cancleInterview }
