@@ -34,7 +34,6 @@ export default function Appointment(props) {
    }, [interview, transition, mode]);
   
   function save(name, interviewer) {
-    if (name && interviewer) {
       transition(SAVING);
       const interview = {
         student: name,
@@ -44,7 +43,6 @@ export default function Appointment(props) {
       bookInterview(id, interview)
       .then(() => transition(SHOW))
       .catch(error => transition(ERROR_SAVE, true))
-    }
   }
 
   function deleteAppointment() {
