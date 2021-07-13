@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import Header from "components/Appointment/Header";
 import Show from "components/Appointment/Show";
 import Empty from "components/Appointment/Empty";
@@ -10,7 +10,6 @@ import useVisualMode from "hooks/useVisualMode";
 import "./styles.scss";
 
 export default function Appointment(props) {
-  // console.log("props-----> ", props);
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -44,7 +43,7 @@ export default function Appointment(props) {
       .then(() => transition(SHOW))
       .catch(error => transition(ERROR_SAVE, true))
   }
-
+  
   function deleteAppointment() {
     transition(DELETING, true);
     

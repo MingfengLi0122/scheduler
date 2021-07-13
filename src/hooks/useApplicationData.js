@@ -18,7 +18,6 @@ function reducer(state, action) {
               ...action.data
               };
     case SET_INTERVIEW: 
-      console.log("state:---", state);
       if (action.data) {
       const appointment = {
         ...state.appointments[action.data.id],
@@ -28,7 +27,6 @@ function reducer(state, action) {
         ...state.appointments,
         [action.data.id]: appointment
       };
-       
       const curDayObj = state.days.find(d => d.name === state.day);
       const curIndex = state.days.findIndex(d => d.name === state.day);
       const listNullApp = curDayObj.appointments.filter(id => !appointments[id].interview);
@@ -36,7 +34,6 @@ function reducer(state, action) {
       const updatedDay = {...curDayObj, spots};
       let days = [...state.days]
       days[curIndex] = updatedDay;
-
       return {
               ...state, 
               appointments,
