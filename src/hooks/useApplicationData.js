@@ -18,7 +18,7 @@ function reducer(state, action) {
               ...action.data
               };
     case SET_INTERVIEW: 
-       console.log("state:---", state);
+      console.log("state:---", state);
       if (action.data) {
       const appointment = {
         ...state.appointments[action.data.id],
@@ -109,7 +109,6 @@ export default function useApplicationData() {
     socket.onmessage = function(event) {
       const data = JSON.parse(event.data);
       if (typeof data === 'object' && data.type) {
-        // console.log("data--------", data);
         const dispatchData = { id: data.id, interview: data.interview }
         return dispatch({
                 type: data.type, 
