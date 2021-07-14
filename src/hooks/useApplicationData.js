@@ -5,7 +5,7 @@ import {
   SET_DAY,
   SET_APPLICATION_DATA,
   SET_INTERVIEW
-} from "../reducer/reducer";
+} from "../reducer/application";
 
 export default function useApplicationData() {
   const [state, dispatch] = useReducer(reducer, {
@@ -16,7 +16,7 @@ export default function useApplicationData() {
   });
 
   const setDay = (day) => dispatch({ type: SET_DAY, data: { day } });
-
+  // Send put request to API and set interview states
   function bookInterview(id, interview) {
     return axios.put(`/api/appointments/${id}`, { interview }).then(() =>
       dispatch({
@@ -25,7 +25,7 @@ export default function useApplicationData() {
       })
     );
   }
-
+  // Send delete request to API and set interview states
   function cancleInterview(id) {
     return axios.delete(`/api/appointments/${id}`).then(() =>
       dispatch({
@@ -34,7 +34,7 @@ export default function useApplicationData() {
       })
     );
   }
-
+  // Set up the application data state based on retrieved data from API
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
@@ -51,7 +51,7 @@ export default function useApplicationData() {
       });
     });
   }, []);
-
+  // Set up websockt connection and use websocket to dynmically update web page from different browsers
   useEffect(() => {
     const socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
 

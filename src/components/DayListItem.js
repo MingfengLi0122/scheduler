@@ -1,13 +1,13 @@
 import React from "react";
 import classNames from "classnames";
 import "components/DayListItem.scss";
-
+// DayListItem component
 export default function DayListItem(props) {
   const classes = classNames("day-list__item", {
     "day-list__item--selected": props.selected,
     "day-list__item--full": props.spots === 0
   });
-
+  // Update returning string based on spots remaining
   const fomatSpots = function () {
     if (!props.spots) {
       return "no spots remaining";
