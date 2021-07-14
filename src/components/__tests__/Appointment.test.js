@@ -5,7 +5,7 @@ import Appointment from "../Appointment/index";
 afterEach(cleanup);
 
 describe("Appointment", () => {
-  it("render without crashing", () => {
+  xit("render without crashing", () => {
     render(<Appointment />);
   });
 });
