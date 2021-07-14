@@ -144,6 +144,7 @@ describe("Application", () => {
       getByText(appointment, "Can not save appointment")
     );
     expect(getByText(appointment, "Can not save appointment")).toBeInTheDocument();
+    
   });
 
   it("shows the delete error when failing to delete an existing appointment", async () => {
