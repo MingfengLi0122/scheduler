@@ -13,8 +13,6 @@ describe("Appointment", () => {
     cy.get("[data-testid=student-name-input]").type("Lydia Miller-Jones");
     cy.get("[alt='Sylvia Palmer']").click();
 
-    // cy.get('.button--confirm').click();
-
     cy.contains("Save").click();
 
     cy.contains(".appointment__card--show", "Lydia Miller-Jones");
@@ -37,7 +35,6 @@ describe("Appointment", () => {
   it("should cancel an interview", () => {
     cy.get("[alt=Delete]").first().click({ force: true });
 
-    // cy.get(".button--danger").last().click()
     cy.contains("Confirm").click();
     
     cy.contains("Deleting").should("exist");
