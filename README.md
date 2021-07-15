@@ -47,8 +47,8 @@ End to end tesing with cypress.
 - Then you are able to create or delete appointment!
 
 ## Tools
-Front-End: React, JSX,  JavaScript,  Axios, HTML and SASS.
-Back-End: Node.js, PostgreSQL and Express.
+Front-End: React, JSX,  JavaScript,  Axios, HTML and SASS.\
+Back-End: Node.js, PostgreSQL and Express.\
 Testing:  Jest, Cypress, Storybook, Webpack Dev Server and Testing Library.
 
 ## Dependencies
