@@ -110,9 +110,6 @@ describe("Application", () => {
     // 8. Wait until the element with the text "Lydia Miller-Jones" is displayed.
     await waitForElement(() => getByText(appointment, "Test3"));
     // 9. Check that the DayListItem with the text "Monday" also has the text "1 spots remaining".
-    // const day = getAllByTestId(container, "day").find(day =>
-    //   getByText(day, "Monday")
-    // )
     const day = getAllByTestId(container, "day").find((day) =>
       getByText(day, "Monday")
     );
@@ -170,5 +167,25 @@ describe("Application", () => {
     await waitForElement(() => getByText(appointment, "Can not cancel appointment"));
     
     expect(getByText(appointment, "Can not cancel appointment")).toBeInTheDocument();
+  });
+
+  it("shows the original form when cancel the deleting of existing appointment", async () => {
+    // 1. Render the Application.
+    const { container } = render(<Application />);
+    // 2. Wait until the text "Archie Cohen" is displayed.
+    await waitForElement(() => getByText(container, "Archie Cohen"));
+    const appointment = getAllByTestId(container, "appointment").find(
+      (appointment) => queryByText(appointment, "Archie Cohen")
+    );
+    // 3. Click the "Delete" button on the booked appointment.
+    fireEvent.click(getByAltText(appointment, "Delete"));
+    // 4. Check that the confirmation message is shown.
+    expect(
+      getByText(appointment, "Delete the appointment?")
+    ).toBeInTheDocument();
+    // 5. Click the "Confirm" button on the confirmation.
+    fireEvent.click(getByText(appointment, "Cancel"));
+    //6. Check that the appointment with the text "Archie Cohen"
+    expect(getByText(appointment, "Archie Cohen")).toBeInTheDocument();
   });
 });
