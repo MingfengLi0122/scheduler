@@ -15,7 +15,6 @@ function reducer(state, action) {
         ...action.data
       };
     case SET_INTERVIEW:
-      if (action.data) {
         const appointment = {
           ...state.appointments[action.data.id],
           interview: action.data.interview
@@ -38,8 +37,6 @@ function reducer(state, action) {
           appointments,
           days
         };
-      }
-      return state;
     default:
       throw new Error(
         `Tried to reduce with unsupported action type: ${action.type}`
