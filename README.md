@@ -4,36 +4,36 @@ Interview scheduler app is built on React which allows users to book, edit and c
 ## Final Product
 # Home Page
 Indicate the appointment spots avaliability for the different days.
-!["home page"](URL)
+!["home page"](https://github.com/MingfengLi0122/scheduler/blob/master/docs/home_page.png)
 
 # Edit Appointment 
 Allow users to edit the information of the appointment.
-!["edit appointment"](URL)
+!["edit appointment"](https://github.com/MingfengLi0122/scheduler/blob/master/docs/edit_appointment.png)
 
 # Input Validation
 Notice users when required information is missing.
-!["input validation"](URL)
+!["input validation"](https://github.com/MingfengLi0122/scheduler/blob/master/docs/invalidate_input.png)
 
 # Delete Confirmation
 Double confirm with users for deleting action.
-!["delete confirmation"](URL)
+!["delete confirmation"](https://github.com/MingfengLi0122/scheduler/blob/master/docs/delete_notice.png)
 
 # Error Handling
 Display error massage when unexpected error occurs by reaching the API.
-!["error handling"](URL)
+!["error handling"](https://github.com/MingfengLi0122/scheduler/blob/master/docs/error_handling.png)
 
 ## Testing
 # Storybook Testing
 Customized compentes testing with storybook.
-!["storybook testing"](URL)
+!["storybook testing"](https://github.com/MingfengLi0122/scheduler/blob/master/docs/storybook_test.png)
 
 # Jest Testing
 Unit testing with jest and generate coverage report.
-!["jest testing"](URL)
+!["jest testing"](https://github.com/MingfengLi0122/scheduler/blob/master/docs/jest_test_result.png)
 
 # Cypress Testing
 End to end tesing with cypress.
-!["cypress testing"](URL)
+!["cypress testing"](https://github.com/MingfengLi0122/scheduler/blob/master/docs/cypress_test_results.png)
 
 ## Dependencies
 - react
@@ -73,10 +73,4 @@ npm test
 npm run cypress
 ```
 
-## Running Storybook Visual Testbed
-
-```sh
-npm run storybook
-```
-
-# Please enjoy! 🤩 
+## Please enjoy! 🤩 
