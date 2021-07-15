@@ -36,7 +36,20 @@ End to end tesing with cypress.
 !["cypress testing"](https://github.com/MingfengLi0122/scheduler/blob/master/docs/cypress_test_results.png)
 
 ## Scheduler-api 
-In order to have the full funtionality, please go to the [scheduler-api](https://github.com/jatanassian/scheduler-api) and follow its set up description.
+- In order to have the full funtionality, please go to the [scheduler-api](https://github.com/jatanassian/scheduler-api) and fork and clone it
+- Follow the steps in the README to setup environment and database
+
+## How to run it locally ?
+- Install dependencies with `npm install` command
+- Open two terminals, first is for scheduler and second is for scheduler-api. 
+- Run both servers with `npm start` command
+- [http://localhost:8000](http://localhost:8000) is for scheyler app, and [http://localhost:8001](http://localhost:8001) is for scheduler-api
+- Then you are able to create or delete appointment!
+
+## Tools
+Front-End: React, JSX,  JavaScript,  Axios, HTML and SASS.
+Back-End: Node.js, PostgreSQL and Express.
+Testing:  Jest, Cypress, Storybook, Webpack Dev Server and Testing Library.
 
 ## Dependencies
 - react
@@ -48,10 +61,6 @@ In order to have the full funtionality, please go to the [scheduler-api](https:/
 - axios
 - jest
 - cypress
-
-## Setup
-
-Install dependencies with `npm install`.
 
 ## Running Webpack Development Server
 
